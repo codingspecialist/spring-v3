@@ -11,7 +11,16 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        User sessionUser = (User) session.getAttribute("sessionUser");
+       // User sessionUser = (User) session.getAttribute("sessionUser");
+
+        // 1. 아직 로그인이 구현되지 않아서, 강제 세션 만듬
+        User sessionUser = User.builder()
+                .id(1)
+                .username("ssar")
+                .password("1234")
+                .email("ssar@nate.com")
+                .build();
+        session.setAttribute("sessionUser", sessionUser);
 
         if (sessionUser == null) {
             throw new Exception401("인증되지 않았어요");
