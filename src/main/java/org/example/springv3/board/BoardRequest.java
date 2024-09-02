@@ -13,14 +13,23 @@ public class BoardRequest {
         @NotEmpty(message = "비워놓지마. (근데 이거 안써줘도 됨)")
         private String content;
 
-        // insert 할 때는 toEntity 를 만든다.
-        public Board toEntity(User sessionUser) { // 날짜는 엔티티에 @CreationTimeStamp 붙여주면 자동으로 들어간다.
+        public Board toEntity(User sessionUser) {
             return Board.builder()
                     .title(title)
                     .content(content)
                     .user(sessionUser)
+
                     .build(); // shift + enter
         }
     }
 
+
+    @Data
+    public static class UpdateDTO {
+        @NotEmpty
+        private String title;
+        @NotEmpty
+        private String content;
+
+    }
 }
