@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+
 @RequiredArgsConstructor
 @Controller
 public class BoardController {
@@ -35,6 +36,20 @@ public class BoardController {
         boardService.게시글수정(id, updateDTO, sessionUser);
 
         return "redirect:/board/" + id;
+    }
+
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable("id") Integer id, HttpServletRequest request) {
+        User sessionUser = User.builder()
+                .id(1).username("ssar").password("1234").email("ssar@nate.com").build();
+        session.setAttribute("sessionUser", sessionUser);
+
+        BoardResponse.DetailDTO model = boardService.게시물상세보기(sessionUser, id);
+        request.setAttribute("model", model);
+
+        return "board/detail";
+
+
     }
 
 }
