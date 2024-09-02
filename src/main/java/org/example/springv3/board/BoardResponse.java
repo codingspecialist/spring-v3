@@ -4,6 +4,7 @@ import lombok.Data;
 import org.example.springv3.user.User;
 
 public class BoardResponse {
+
     @Data
     public static class DetailDTO {
 
