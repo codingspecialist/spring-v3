@@ -1,5 +1,6 @@
 package org.example.springv3.board;
 
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.springv3.core.error.ex.Exception403;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardQueryRepository boardQueryRepository;
 
     @Transactional
     public void 게시글수정(int id, BoardRequest.UpdateDTO updateDTO, User sessionUser) {
@@ -27,4 +29,5 @@ public class BoardService {
         board.setContent(updateDTO.getContent());
 
     }
+
 }
