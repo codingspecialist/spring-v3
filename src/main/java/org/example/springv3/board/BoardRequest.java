@@ -10,7 +10,7 @@ public class BoardRequest {
         //@Pattern(regexp = ) 정규표현식 패턴
         @NotEmpty
         private String title;
-        @NotEmpty(message = "비워놓지마. (근데 이거 안써줘도 됨)")
+        @NotEmpty(message = "비워놓지마.")
         private String content;
 
         public Board toEntity(User sessionUser) {

@@ -46,7 +46,7 @@ public class BoardService {
         if (board.getUser().getId() != sessionUser.getId()) {
             throw new Exception403("게시글을 수정할 권한이 없습니다");
         }
-        // 3. 게시글 수정
+        // 3. 게시글 수정하기
         board.setTitle(updateDTO.getTitle());
         board.setContent(updateDTO.getContent());
 
