@@ -1,17 +1,13 @@
 package org.example.springv3.board;
 
-
 import lombok.RequiredArgsConstructor;
-
+import org.example.springv3.core.error.ex.Exception403;
+import org.example.springv3.core.error.ex.Exception404;
 import org.example.springv3.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.example.springv3.core.error.ex.Exception403;
-import org.example.springv3.core.error.ex.Exception404;
-
+import java.util.List;
 import java.util.Optional;
-
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +16,10 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardQueryRepository boardQueryRepository;
 
+    public List<Board> 게시글목록보기() {
+        List<Board> boardList = boardRepository.findAll();
+        return boardList;
+    }
 
     @Transactional
     public void 게시글쓰기(BoardRequest.SaveDTO saveDTO, User sessionUser) {
@@ -69,8 +69,5 @@ public class BoardService {
 
 
         return new BoardResponse.DetailDTO(board,sessionUser);
-
-
     }
-
 }
