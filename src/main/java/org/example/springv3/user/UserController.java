@@ -27,15 +27,4 @@ public class UserController {
         session.setAttribute("sessionUser", sessionUser);
         return "redirect:/";
     }
-
-    @GetMapping("/join-form")
-    public String joinForm() {
-        return "user/join-form";
-    }
-
-    @GetMapping("/login-form")
-    public String login() {
-        System.out.println("loginFrom 호출됨");
-        return "user/login-form";
-    }
 }
