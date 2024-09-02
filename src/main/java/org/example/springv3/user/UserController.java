@@ -16,12 +16,6 @@ public class UserController {
     private final HttpSession session;
     private final UserService userService;
 
-
-    @GetMapping("login-form")
-    public String loginForm() {
-        return "user/login-form";
-    }
-
     @PostMapping("/join")
     public String join(@Valid UserRequest.JoinDTO joinDTO, Errors errors) {
         userService.회원가입(joinDTO);
