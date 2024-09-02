@@ -28,7 +28,6 @@ public class BoardResponse {
                 }
             }
 
-
             this.userId = board.getUser().getId();
             this.username = board.getUser().getUsername();
         }

@@ -5,18 +5,12 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.springv3.user.User;
-import org.example.springv3.user.User;
 import org.example.springv3.user.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,9 +20,13 @@ public class BoardController {
     private final HttpSession session;
     private final BoardService boardService;
 
+    @GetMapping("/")
+    public String list(HttpServletRequest request) {
+        List<Board> boardList = boardService.게시글목록보기();
+        request.setAttribute("models", boardList);
 
-
-
+        return "board/list";
+    }
 
 
     @PostMapping("/api/board/{id}/delete")
@@ -38,8 +36,6 @@ public class BoardController {
         return "redirect:/";
 
     }
-
-
 
 
     @GetMapping("/api/board/save-form")
@@ -58,9 +54,7 @@ public class BoardController {
         boardService.게시글쓰기(saveDTO, sessionUser);
 
         return "redirect:/";
-
     }
-
 
 
     @GetMapping("/api/board/{id}/update-form")
