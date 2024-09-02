@@ -12,15 +12,15 @@ public class UserService {
     private final UserQueryRepository userQueryRepository;
 
     @Transactional
-    public void 회원가입(User user) {
+    public void 회원가입(UserRequest.JoinDTO joinDTO) {
 
-        User userPs= userRepository.findByUsername(user.getUsername());
+        User userPs= userRepository.findByUsername(joinDTO.getUsername());
 
         if(userPs != null) {
-            new Exception400("이미 존재하는 유저입니다.");
+            throw new Exception400("이미 존재하는 유저입니다.");
         }
 
-        userRepository.save(user);
+        userRepository.save(joinDTO.toEntity());
 
     }
 }
