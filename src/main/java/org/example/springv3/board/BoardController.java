@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.springv3.user.User;
-
 import org.example.springv3.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +28,16 @@ public class BoardController {
         return "board/list";
     }
 
+
+    @PostMapping("/api/board/{id}/delete")
+    public String removeBoard(@PathVariable("id") Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        boardService.게시글_삭제하기(id, sessionUser);
+        return "redirect:/";
+
+    }
+
+
     @GetMapping("/api/board/save-form")
     public String saveForm() {
         session.setAttribute("sessionUser", User.builder().id(1).username("ssar").password("1234").email("ssar@nate.com").build());
@@ -45,7 +54,6 @@ public class BoardController {
         boardService.게시글쓰기(saveDTO, sessionUser);
 
         return "redirect:/";
-
     }
 
 
