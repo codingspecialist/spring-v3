@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final UserQueryRepository userQueryRepository;
 
+    public User 로그인(UserRequest.LoginDTO loginDTO) {
+        User user = userRepository.findByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
+        return user;
+    }
 }
