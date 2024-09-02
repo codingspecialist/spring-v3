@@ -24,7 +24,6 @@ public class BoardController {
     public String list(HttpServletRequest request) {
         List<Board> boardList = boardService.게시글목록보기();
         request.setAttribute("models", boardList);
-
         return "board/list";
     }
 
@@ -32,17 +31,13 @@ public class BoardController {
     @PostMapping("/api/board/{id}/delete")
     public String removeBoard(@PathVariable("id") Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        boardService.게시글_삭제하기(id, sessionUser);
+        boardService.게시글삭제하기(id, sessionUser);
         return "redirect:/";
-
     }
 
 
     @GetMapping("/api/board/save-form")
     public String saveForm() {
-        session.setAttribute("sessionUser", User.builder().id(1).username("ssar").password("1234").email("ssar@nate.com").build());
-        //User sessionUser = (User) session.getAttribute("sessionUser");
-
         return "board/save-form";
     }
 
@@ -60,7 +55,6 @@ public class BoardController {
     @GetMapping("/api/board/{id}/update-form")
     public String updateForm(@PathVariable("id") int id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-
         Board board = boardService.게시글수정화면(id, sessionUser);
         request.setAttribute("model", board);
         return "board/update-form";
@@ -69,19 +63,15 @@ public class BoardController {
     @PostMapping("/api/board/{id}/update")
     public String update(@PathVariable("id") int id, @Valid BoardRequest.UpdateDTO updateDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-
         boardService.게시글수정(id, updateDTO, sessionUser);
-
         return "redirect:/board/" + id;
     }
 
     @GetMapping("/board/{id}")
     public String detail(@PathVariable("id") Integer id, HttpServletRequest request) {
-        User sessionUser = User.builder()
-                .id(1).username("ssar").password("1234").email("ssar@nate.com").build();
-        session.setAttribute("sessionUser", sessionUser);
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-        BoardResponse.DetailDTO model = boardService.게시물상세보기(sessionUser, id);
+        BoardResponse.DetailDTO model = boardService.게시글상세보기(sessionUser, id);
         request.setAttribute("model", model);
 
         return "board/detail";

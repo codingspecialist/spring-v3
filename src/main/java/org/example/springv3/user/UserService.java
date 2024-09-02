@@ -6,6 +6,7 @@ import org.example.springv3.core.error.ex.Exception400;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class UserService {
