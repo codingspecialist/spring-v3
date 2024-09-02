@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import org.example.springv3.core.error.ex.Exception404;
 
-
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class BoardService {
@@ -27,7 +27,7 @@ public class BoardService {
 
 
     @Transactional
-    public void 게시글_삭제하기(Integer id, User sessionUser) {
+    public void 게시글삭제하기(Integer id, User sessionUser) {
         Optional<Board> board = boardRepository.findById(id);
         if(board.isEmpty()) {
             throw new Exception400("존재하지 않는 게시글입니다.");
@@ -73,22 +73,16 @@ public class BoardService {
 
     }
 
+    
+    public BoardResponse.DetailDTO 게시글상세보기(User sessionUser, Integer boardId){
+        Board boardPS = boardRepository.findById(boardId)
+                .orElseThrow(() -> new Exception404("게시글이 없습니다."));
 
-    @Transactional(readOnly = true)
-    public BoardResponse.DetailDTO 게시물상세보기(User sessionUser, Integer boardId){
-        Optional<Board> boardPS = boardRepository.findById(boardId);
-
-        if(boardPS.isEmpty()){
-            throw new Exception404("게시물이 없습니다.");
-        }
-        Board board = boardPS.get();
-
-
-        if(sessionUser.getId() != board.getUser().getId()){
+        if(sessionUser.getId() != boardPS.getUser().getId()){
             throw  new Exception403("내가 적은 글이 아닙니다.");
         }
 
 
-        return new BoardResponse.DetailDTO(board,sessionUser);
+        return new BoardResponse.DetailDTO(boardPS,sessionUser);
     }
 }
