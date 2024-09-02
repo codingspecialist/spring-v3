@@ -1,6 +1,7 @@
 package org.example.springv3.user;
 
 import lombok.RequiredArgsConstructor;
+import org.example.springv3.core.error.ex.Exception401;
 import org.example.springv3.core.error.ex.Exception400;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final UserQueryRepository userQueryRepository;
+
+
+    public User 로그인(UserRequest.LoginDTO loginDTO) {
+        User user = userRepository.findByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
+        try{
+            return user;
+        }catch (Exception e){
+            throw new Exception401("인증되지 않았습니다");
+        }
+    }
 
     @Transactional
     public void 회원가입(UserRequest.JoinDTO joinDTO) {

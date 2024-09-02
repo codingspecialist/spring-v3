@@ -1,4 +1,5 @@
 {{>layout/header}}
+
 <div class="container p-5">
 
     <div class="card">
@@ -6,8 +7,7 @@
         <div class="card-body">
             <form action="/api/board/{{model.id}}/update" method="post">
                 <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter title" name="title"
-                           value="{{model.title}}">
+                    <input type="text" class="form-control" placeholder="Enter title" name="title" value="{{model.title}}">
                 </div>
                 <div class="mb-3">
                     <textarea class="form-control" rows="5" name="content">{{model.content}}</textarea>
