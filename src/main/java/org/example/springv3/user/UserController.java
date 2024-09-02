@@ -3,6 +3,7 @@ package org.example.springv3.user;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,5 +27,16 @@ public class UserController {
         System.out.println("12312323123213" + sessionUser.getUsername());
         session.setAttribute("sessionUser", sessionUser);
         return "redirect:/";
+    }
+
+    @PostMapping("/join")
+    public String join(@Valid UserRequest.JoinDTO joinDTO, Errors errors) {
+        userService.회원가입(joinDTO);
+        return "redirect:/login-form";
+    }
+
+    @GetMapping("/join-form")
+    public String joinForm() {
+        return "user/join-form";
     }
 }
