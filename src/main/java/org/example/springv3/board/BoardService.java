@@ -1,16 +1,14 @@
 package org.example.springv3.board;
 
 import lombok.RequiredArgsConstructor;
-import org.example.springv3.core.error.ex.Exception400;
 import org.example.springv3.core.error.ex.Exception403;
+import org.example.springv3.core.error.ex.Exception404;
 import org.example.springv3.user.User;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.example.springv3.core.error.ex.Exception404;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -21,19 +19,19 @@ public class BoardService {
     private final BoardQueryRepository boardQueryRepository;
 
     public List<Board> 게시글목록보기() {
-        List<Board> boardList = boardRepository.findAll();
+        //Pageable pg = PageRequest.of(0, 3, Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        List<Board> boardList = boardRepository.findAll(sort);
         return boardList;
     }
 
 
     @Transactional
     public void 게시글삭제하기(Integer id, User sessionUser) {
-        Optional<Board> board = boardRepository.findById(id);
-        if(board.isEmpty()) {
-            throw new Exception400("존재하지 않는 게시글입니다.");
-        }
+        Board board = boardRepository.findById(id)
+                .orElseThrow(()-> new Exception404("게시글을 찾을 수 없습니다"));
 
-        if (board.get().getUser().getId() != sessionUser.getId()) {
+        if (board.getUser().getId() != sessionUser.getId()) {
             throw new Exception403("작성자가 아닙니다.");
         }
 
@@ -50,7 +48,15 @@ public class BoardService {
     }
 
     public Board 게시글수정화면(int id, User sessionUser) {
-        Board board = boardRepository.findById(id);
+        Board board = boardRepository.findById(id)
+                .orElseThrow(()-> new Exception404("게시글을 찾을 수 없습니다"));
+
+//        Optional<Board> boardOP = boardRepository.findById(1);
+//        if(boardOP.isEmpty()){
+//            throw new Exception404("게시글을 찾을 수 없습니다");
+//        }
+//
+//        Board board = boardOP.get();
 
         if (board.getUser().getId() != sessionUser.getId()) {
             throw new Exception403("게시글 수정 권한이 없습니다.");
@@ -61,7 +67,8 @@ public class BoardService {
     @Transactional
     public void 게시글수정(int id, BoardRequest.UpdateDTO updateDTO, User sessionUser) {
         // 1. 게시글 조회 (없으면 404)
-        Board board = boardRepository.findById(id);
+        Board board = boardRepository.findById(id)
+                .orElseThrow(()-> new Exception404("게시글을 찾을 수 없습니다"));
 
         // 2. 권한체크
         if (board.getUser().getId() != sessionUser.getId()) {
@@ -75,13 +82,8 @@ public class BoardService {
 
     
     public BoardResponse.DetailDTO 게시글상세보기(User sessionUser, Integer boardId){
-        Board boardPS = boardRepository.findById(boardId)
+        Board boardPS = boardRepository.mFindById(boardId)
                 .orElseThrow(() -> new Exception404("게시글이 없습니다."));
-
-        if(sessionUser.getId() != boardPS.getUser().getId()){
-            throw  new Exception403("내가 적은 글이 아닙니다.");
-        }
-
 
         return new BoardResponse.DetailDTO(boardPS,sessionUser);
     }

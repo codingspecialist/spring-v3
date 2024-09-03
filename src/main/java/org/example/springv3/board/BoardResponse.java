@@ -7,8 +7,7 @@ public class BoardResponse {
 
     @Data
     public static class DetailDTO {
-
-        private Integer boardId;
+        private Integer id;
         private String title;
         private String content;
         private Boolean isOwner;
@@ -16,7 +15,7 @@ public class BoardResponse {
         private String username;
 
         public DetailDTO(Board board, User sessionUser) {
-            this.boardId = board.getId();
+            this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
             this.isOwner = false;
@@ -27,7 +26,6 @@ public class BoardResponse {
 
                 }
             }
-
             this.userId = board.getUser().getId();
             this.username = board.getUser().getUsername();
         }
