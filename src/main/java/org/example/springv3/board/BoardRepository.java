@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 import java.util.Optional;
@@ -21,17 +22,23 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Integer> {
 
 
-    @Modifying
-    @Transactional
-    @Query("delete from Board b where b.id=:id")
-    void deleteById(@Param("id") Integer id);
+
+
+    //@Query("select b from Board b join fetch b.user u left join fetch b.replies r left join fetch r.user ru where b.id=:id")
+    //Optional<Board> mFindByIdWithReply();
+
+
+    //join 쿼리
+    //@Query(value = "select * from board_tb bt inner join user_tb on bt.user_id = ut.id wherebt.id =?", nativeQuery = true)
+    @Query("select b from Board b join fetch b.user u where b.id=:id")
+    //하나를 찾을 때는 Optional을 쓰는게 좋다.
+    Optional<Board> mFindById(@Param("id") int id);
 
 
 
-    @Query("select b from Board b where b.id=:id")
-    Board findById(@Param("id") int id);
+    @Query("select b from Board b order by b.id desc")
+    List<Board> mFindAll();
 
-    Optional<Board> findById(Integer boardId);
 
 }
 

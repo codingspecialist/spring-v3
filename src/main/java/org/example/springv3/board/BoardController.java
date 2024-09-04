@@ -70,7 +70,6 @@ public class BoardController {
     @GetMapping("/board/{id}")
     public String detail(@PathVariable("id") Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-
         BoardResponse.DetailDTO model = boardService.게시글상세보기(sessionUser, id);
         request.setAttribute("model", model);
 

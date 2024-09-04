@@ -19,4 +19,5 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         return true; // false면 컨트롤러 진입안됨
     }
+
 }
