@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
+@Builder
 @Setter
 @Getter
 @Table(name = "user_tb")

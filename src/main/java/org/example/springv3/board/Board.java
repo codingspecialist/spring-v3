@@ -1,14 +1,14 @@
 package org.example.springv3.board;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.example.springv3.reply.Reply;
 import org.example.springv3.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
+
 
 @NoArgsConstructor // 빈 생성자 (하이버네이트가 om 할때 필요)
 @Setter
@@ -29,6 +29,9 @@ public class Board {
     // fk
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @OneToMany(mappedBy = "board")
+    private List<Reply> replies;
 
     @Builder
     public Board(Integer id, String title, String content, Timestamp createdAt, User user) {
