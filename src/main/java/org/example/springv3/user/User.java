@@ -1,5 +1,6 @@
 package org.example.springv3.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username; // 아이디
     @Column(nullable = false)
+
     private String password;
     @Column(nullable = false)
     private String email;

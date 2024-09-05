@@ -23,9 +23,9 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
 
 
-
-    //@Query("select b from Board b join fetch b.user u left join fetch b.replies r left join fetch r.user ru where b.id=:id")
-    //Optional<Board> mFindByIdWithReply();
+    //@Query("select b from Board b join fetch b.user u left join fetch b.replies r left join fetch r.user where b.id=:id")
+    @Query("select b from Board b join fetch b.user u left join fetch b.replies r left join fetch r.user where b.id=:id")
+    Optional<Board> mFindByIdWithReply(@Param("id") int id);
 
 
     //join 쿼리

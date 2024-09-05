@@ -85,11 +85,29 @@ public class BoardService {
 
     }
 
+    public BoardResponse.DTO 게시글수정화면V2(int id, User sessionUser) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(()-> new Exception404("게시글을 찾을 수 없습니다"));
+
+        if (board.getUser().getId() != sessionUser.getId()) {
+            throw new Exception403("게시글 수정 권한이 없습니다.");
+        }
+        return new BoardResponse.DTO(board);
+    }
+
+
+
     
     public BoardResponse.DetailDTO 게시글상세보기(User sessionUser, Integer boardId){
-        Board boardPS = boardRepository.findById(boardId)
+        Board boardPS = boardRepository.mFindByIdWithReply(boardId)
                 .orElseThrow(() -> new Exception404("게시글이 없습니다."));
 
-        return new BoardResponse.DetailDTO(boardPS,sessionUser);
+        return new BoardResponse.DetailDTO(boardPS, sessionUser);
+    }
+
+    public Board 게시글상세보기V3(User sessionUser, Integer boardId){
+        Board boardPS = boardRepository.mFindByIdWithReply(boardId)
+                .orElseThrow(() -> new Exception404("게시글이 없습니다."));
+        return boardPS;
     }
 }

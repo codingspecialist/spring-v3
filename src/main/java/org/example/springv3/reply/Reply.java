@@ -1,6 +1,7 @@
 package org.example.springv3.reply;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class Reply {
 
     private String comment; // 댓글 내용
 
-
+    @JsonIgnoreProperties({"password"})
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;     //N포드 생각
 

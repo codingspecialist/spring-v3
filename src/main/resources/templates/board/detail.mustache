@@ -3,16 +3,17 @@
 <div class="container p-5">
 
     <!-- 수정삭제버튼 -->
-    {{#model.isOwner}}
+        {{#model.isOwner}}
         <div class="d-flex justify-content-end">
             <a href="/api/board/{{model.id}}/update-form" class="btn btn-warning me-1">수정</a>
             <form action="/api/board/{{model.id}}/delete" method="post">
                 <button class="btn btn-danger">삭제</button>
             </form>
         </div>
-    {{/model.isOwner}}
+        {{/model.isOwner}}
 
     <div class="d-flex justify-content-end">
+        <!-- 컬렉션이면 user로 만들어야한다.-->
             <b>작성자</b> : {{model.username}}
     </div>
 
@@ -42,19 +43,22 @@
             <b>댓글리스트</b>
         </div>
         <div class="list-group">
+                {{#model.replies}}
+
 
                 <!-- 댓글아이템 -->
                 <div class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="d-flex">
-                        <div class="px-1 me-1 bg-primary text-white rounded">saar</div>
-                        <div>댓글1</div>
+                        <div class="px-1 me-1 bg-primary text-white rounded">{{username}}</div>
+                        <div>{{comment}}</div>
                     </div>
-
+                        {{#isOwner}}
                         <form action="#" method="post">
                             <button class="btn">🗑</button>
                         </form>
+                        {{/isOwner}}
                 </div>
-
+                {{/model.replies}}
         </div>
     </div>
 

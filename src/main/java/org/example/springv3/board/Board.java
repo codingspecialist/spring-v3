@@ -1,5 +1,6 @@
 package org.example.springv3.board;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,10 +33,12 @@ public class Board {
     private Timestamp createdAt;
 
     // fk
+//@JsonIgnoreProperties({"password"})
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     //양방향 매핑
+  //  @JsonIgnoreProperties({"board","createdAt"})
     @OneToMany(mappedBy = "board")
     private List<Reply> replies;
 
