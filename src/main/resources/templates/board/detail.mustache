@@ -42,16 +42,22 @@
             <b>댓글리스트</b>
         </div>
         <div class="list-group">
+
+            {{#model.replies}}
             <!-- 댓글아이템 -->
             <div class="list-group-item d-flex justify-content-between align-items-center">
                 <div class="d-flex">
-                    <div class="px-1 me-1 bg-primary text-white rounded">ssar</div>
-                    <div>댓글1</div>
+                    <div class="px-1 me-1 bg-primary text-white rounded">{{username}}</div>
+                    <div>{{comment}}</div>
                 </div>
-                <form action="#" method="post">
-                    <button class="btn">🗑</button>
-                </form>
+                {{#isOwner}}
+                    <form action="#" method="post">
+                        <button class="btn">🗑</button>
+                    </form>
+                {{/isOwner}}
             </div>
+            {{/model.replies}}
+
         </div>
     </div>
 </div>
