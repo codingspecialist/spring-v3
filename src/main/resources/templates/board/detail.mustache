@@ -45,7 +45,7 @@
 
             {{#model.replies}}
             <!-- 댓글아이템 -->
-            <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div id="reply-{{id}}" class="list-group-item d-flex justify-content-between align-items-center">
                 <div class="d-flex">
                     <div class="px-1 me-1 bg-primary text-white rounded">{{username}}</div>
                     <div>{{comment}}</div>
@@ -62,12 +62,15 @@
 
 <script>
     async function deleteReply(id){
-        let response = await fetch(`/reply/${id}`, {
+        let response = await fetch(`/api/reply/${id}`, {
             method: "delete"
         });
-        console.log(response);
         let responseBody = await response.json(); // 파싱
-        console.log(responseBody);
+        if(response.ok){
+            $(`#reply-${id}`).remove();
+        }else{
+            alert(responseBody.msg);
+        }
     }
 </script>
 
