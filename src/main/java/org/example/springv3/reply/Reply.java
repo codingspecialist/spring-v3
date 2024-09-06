@@ -26,7 +26,7 @@ public class Reply {
 
     @JsonIgnoreProperties({"password"})
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;     //N포드 생각
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;

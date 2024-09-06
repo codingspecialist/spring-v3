@@ -5,6 +5,8 @@ import org.example.springv3.core.util.Script;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
+// 이걸 쓴 이유는 실패메시지를 주고 내가 원하는 페이지로 보내기 위해
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     

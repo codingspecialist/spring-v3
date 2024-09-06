@@ -1,11 +1,17 @@
 package org.example.springv3.board;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.springv3.core.error.ex.Exception404;
+import org.example.springv3.core.error.ex.ExceptionApi404;
+import org.example.springv3.core.util.Resp;
 import org.example.springv3.user.User;
 import org.example.springv3.user.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +19,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,6 +29,68 @@ public class BoardController {
 
     private final HttpSession session;
     private final BoardService boardService;
+
+
+    @GetMapping("/test/v1")
+    //@ResposeBody 붙이지 않으면 데이터를 받지 못 한다.
+    public @ResponseBody Resp testV1(){
+        User u = new User();
+        u.setId(1);
+        u.setUsername("ssar");
+        u.setPassword("1234");
+        u.setEmail("ssar@gmail.com");
+
+        return Resp.ok(u);
+    }
+
+    @GetMapping("/test/v2")
+    //@ResposeBody 붙이지 않으면 데이터를 받지 못 한다.
+    public @ResponseBody Resp testV2(){
+        User u = new User();
+        u.setId(1);
+        u.setUsername("ssar");
+        u.setPassword("1234");
+        u.setEmail("ssar@gmail.com");
+
+        User u1 = new User();
+        u1.setId(1);
+        u1.setUsername("cos");
+        u1.setPassword("1234");
+        u1.setEmail("ssar@gmail.com");
+        //JSON 어레이
+        List<User> users = Arrays.asList(u, u1);
+        return Resp.ok(users);
+    }
+
+    @GetMapping("/test/v3")
+    //@ResposeBody 붙이지 않으면 데이터를 받지 못 한다.
+    public @ResponseBody Resp testV3(){
+        //데이터를 응답 해달라는 방식이다.
+        // throw new Exception404("유저를 찾을 수 없습니다."); 이렇게 클라이언트한테 보내주면 안된다.
+        // F12 눌려서 확인해보면 200으로 응답을 한다. 그러면 안된다.
+
+        return Resp.fail(404,"유저를 찾을 수 없습니다.");
+    }
+
+    @GetMapping("/test/v4")
+    public @ResponseBody Resp testV4(HttpServletResponse response){
+        response.setStatus(404);
+        return Resp.fail(404, "유저를 찾을 수 없습니다");
+    }
+
+    @GetMapping("/test/v5")
+    public ResponseEntity<?> testV5(){ // 1. ResponseBody 생략, 상태코드를 넣을 수 있따.
+        return new ResponseEntity<>(Resp.fail(404, "찾을 수 없습니다"), HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/test/v6")
+    public ResponseEntity<?> testV6(){ // 1. ResponseBody 생략, 상태코드를 넣을 수 있따.
+        throw new ExceptionApi404("페이지를 찾을 수 없습니다.");
+    }
+
+
+
+
 
     @GetMapping("/")
     public String list(HttpServletRequest request) {
@@ -78,12 +148,11 @@ public class BoardController {
     @GetMapping("/board/{id}")
     public String detail(@PathVariable("id") Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
+
         BoardResponse.DetailDTO model = boardService.게시글상세보기(sessionUser, id);
         request.setAttribute("model", model);
 
         return "board/detail";
-
-
     }
 
     @GetMapping("/v2/board/{id}")
