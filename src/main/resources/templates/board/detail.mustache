@@ -51,9 +51,7 @@
                     <div>{{comment}}</div>
                 </div>
                 {{#isOwner}}
-                    <form action="#" method="post">
-                        <button class="btn">🗑</button>
-                    </form>
+                        <button onclick="deleteReply('{{id}}')" type="button" class="btn">🗑</button>
                 {{/isOwner}}
             </div>
             {{/model.replies}}
@@ -61,5 +59,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    async function deleteReply(id){
+        let response = await fetch(`/reply/${id}`, {
+            method: "delete"
+        });
+        console.log(response);
+        let responseBody = await response.json(); // 파싱
+        console.log(responseBody);
+    }
+</script>
 
 {{>layout/footer}}
