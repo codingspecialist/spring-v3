@@ -1,5 +1,6 @@
 package org.example.springv3.core.error;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.springv3.core.error.ex.*;
 import org.example.springv3.core.util.Resp;
 import org.example.springv3.core.util.Script;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalApiExceptionHandler {
     
@@ -39,6 +41,13 @@ public class GlobalApiExceptionHandler {
     @ExceptionHandler(ExceptionApi500.class)
     public ResponseEntity<?> ex500(Exception e) {
         return new ResponseEntity<>(Resp.fail(500, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // 서버에서 심각한 오류가 발생했을때 (모를 때)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> ex(Exception e) {
+        log.error(e.getMessage());
+        return new ResponseEntity<>(Resp.fail(500, "알 수 없는 에러입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 

@@ -38,11 +38,7 @@ public class GlobalExceptionHandler {
         return Script.back(e.getMessage());
     }
 
-    // 서버에서 심각한 오류가 발생했을때 (모를 때)
-    @ExceptionHandler(Exception.class)
-    public String ex(Exception e) {
-        return Script.back(e.getMessage());
-    }
+
 }
 
 

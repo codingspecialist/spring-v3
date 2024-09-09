@@ -31,15 +31,19 @@ public class ReplyService {
 
     @Transactional
     public ReplyResponse.DTO 댓글쓰기(ReplyRequest.SaveDTO saveDTO, User sessionUser) {
+        System.out.println(3);
         // 1. 게시글 존재 유무 확인
         Board boardPS = boardRepository.findById(saveDTO.getBoardId())
                 .orElseThrow(() -> new ExceptionApi404("게시글을 찾을 수 없습니다"));
 
+        System.out.println(4);
         // 2. 비영속 댓글 객체 만들기
         Reply reply = saveDTO.toEntity(sessionUser, boardPS);
 
+        System.out.println(5);
         // 3. 댓글 저장 (reply가 영속화됨)
         replyRepository.save(reply);
+        System.out.println(6);
         return new ReplyResponse.DTO(reply);
     }
 }

@@ -34,7 +34,7 @@
                 <input type="hidden" value="{{model.id}}" id="boardId">
                 <textarea class="form-control" rows="2" id="comment"></textarea>
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-outline-primary mt-1">댓글등록</button>
+                    <button onclick="saveReply()" type="button" class="btn btn-outline-primary mt-1">댓글등록</button>
                 </div>
             </form>
         </div>
@@ -43,8 +43,7 @@
         <div class="card-footer">
             <b>댓글리스트</b>
         </div>
-        <div class="list-group">
-
+        <div class="list-group" id="reply-box">
             {{#model.replies}}
             <!-- 댓글아이템 -->
             <div id="reply-{{id}}" class="list-group-item d-flex justify-content-between align-items-center">
@@ -57,12 +56,45 @@
                 {{/isOwner}}
             </div>
             {{/model.replies}}
-
         </div>
     </div>
 </div>
 
 <script>
+
+    function replyItem(reply){
+        return `<div id="reply-${reply.id}" class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex">
+                    <div class="px-1 me-1 bg-primary text-white rounded">${reply.username}</div>
+                    <div>${reply.comment}</div>
+                </div>
+                <button onclick="deleteReply('${reply.id}')" type="button" class="btn">🗑</button>
+            </div>`;
+    }
+
+    async function saveReply(){
+        // 1. Reply 객체 만들기 (id로 찾아서)
+        let reply = {
+          comment: $("#comment").val(),
+          boardId: $("#boardId").val()
+        };
+
+        // 2. fetch 요청하기
+        let response = await fetch(`/api/reply`, {
+            method: "post",
+            body: JSON.stringify(reply),
+            headers: {
+                "Content-Type":"application/json; charset=utf-8"
+            }
+        });
+        let responseBody = await response.json(); // DTO !!
+        console.log(responseBody);
+        // 3. CSR 하기
+        $("#reply-box").prepend(replyItem(responseBody.body));
+        $("textarea").val("");
+    }
+
+
     async function deleteReply(id){
         // 1. header + body
         let response = await fetch(`/api/reply/${id}`, {

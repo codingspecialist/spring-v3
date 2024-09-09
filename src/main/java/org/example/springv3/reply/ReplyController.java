@@ -21,8 +21,11 @@ public class ReplyController {
 
     @PostMapping("/api/reply")
     public ResponseEntity<?> save(@RequestBody ReplyRequest.SaveDTO saveDTO){
+        System.out.println(1);
         User sessionUser = (User) session.getAttribute("sessionUser");
+        System.out.println(2);
         ReplyResponse.DTO replyDTO = replyService.댓글쓰기(saveDTO, sessionUser);
+        System.out.println(7);
         return ResponseEntity.ok(Resp.ok(replyDTO));
     }
 

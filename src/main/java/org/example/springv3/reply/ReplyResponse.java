@@ -12,8 +12,11 @@ public class ReplyResponse {
 
         public DTO(Reply reply) {
             this.id = reply.getId();
+            System.out.println("--1");
             this.comment = reply.getComment();
+            System.out.println("--2");
             this.username = reply.getUser().getUsername();
+            System.out.println("--3");
         }
     }
 }
