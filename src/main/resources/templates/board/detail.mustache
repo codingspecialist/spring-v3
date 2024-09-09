@@ -1,5 +1,8 @@
 {{>layout/header}}
 
+
+
+
 <div class="container p-5">
 
     <!-- 수정삭제버튼 -->
@@ -29,10 +32,15 @@
     <div class="card mt-3">
         <!-- 댓글등록 -->
         <div class="card-body">
-            <form action="/reply/save" method="post">
-                <textarea class="form-control" rows="2" name="comment"></textarea>
+            <!-- form태그는 부분리로딩을 할 수 없다. 기능만 돌아가게 하는 것이다.-->
+            <form>
+                <!-- 유저 정보는 무조건 session에서 가져와야한다.
+                form 태그에서 꼭 hidden을 써야한다!!
+                -->
+                <input type="hidden" value="{{model.id}}" id="boardId">
+                <textarea class="form-control" rows="2" id="comment"></textarea>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-primary mt-1">댓글등록</button>
+                    <button onclick="saveReply()" type="button" class="btn btn-outline-primary mt-1">댓글등록</button>
                 </div>
             </form>
         </div>
@@ -41,7 +49,7 @@
         <div class="card-footer">
             <b>댓글리스트</b>
         </div>
-        <div class="list-group">
+        <div class="list-group" id="reply-box">
 
             {{#model.replies}}
                 <!-- 댓글아이템 -->
@@ -51,9 +59,8 @@
                         <div>{{comment}}</div>
                     </div>
                     {{#isOwner}}
-                            <!-- 버튼타입으로 바꿔야한다. 이유는 submit이 되기 때문에-->
-                            <button onclick="deleteReply('{{id}}')" type="button" class="btn">🗑</button>
-
+                        <!-- 버튼타입으로 바꿔야한다. 이유는 submit이 되기 때문에-->
+                        <button onclick="deleteReply('{{id}}')" type="button" class="btn">🗑</button>
                     {{/isOwner}}
                 </div>
             {{/model.replies}}
@@ -62,16 +69,66 @@
     </div>
 </div>
 
-<script>
 
-    async function deleteReply(id){
+<script>
+    //1. 책임-> 디자인에 데이터를 바인딩 할 수 있다.
+    function replyItem(reply){
+        return `<div id="reply-${reply.id}" class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex">
+                    <div class="px-1 me-1 bg-primary text-white rounded">${reply.username}</div>
+                    <div>${reply.comment}</div>
+                </div>
+                <button onclick="deleteReply('${reply.id}')" type="button" class="btn">🗑</button>
+            </div>`;
+    }
+
+    // 1. 책임 -> 통신해서 데이터 요청하고 응답받으면 CSR하기
+    async function saveReply() {
+        //1. Reply 객체 만들기 (id로 찾아서)
+        let reply = {
+            comment: $("#comment").val(),
+            boardId: $("#boardId").val()
+        };
+
+        //2. fetch 요청하기
+        let response = await fetch('/api/reply', {
+            method: "post",
+            body: JSON.stringify(reply),
+            headers: {
+                //들고가는 데이터를
+                "Content-type": "application/json; charset=utf-8"
+            }
+        });
+        let responseBody = await response.json(); // DTO!!
+        console.log(responseBody);
+        //3. CSR 하기
+        //$("#reply-box")에서 #은 jQuery에서 특정 HTML 요소를 선택하기 위한 ID 선택자를 의미합니다. 즉, id 속성이 reply-box인 요소를 선택하는 것입니다.
+        // 만약 #을 제거하고 $("reply-box")로 사용하게 되면, jQuery는 tag name으로 해석하게 되어 <reply-box>라는 HTML 태그를 찾으려고 시도할 것입니다.
+        // 하지만 일반적인 HTML 표준에는 reply-box라는 태그가 없으므로, 원하는 요소를 찾지 못하게 됩니다.
+        //따라서 id가 reply-box인 요소를 선택하려면 반드시 #reply-box로 사용해야 합니다. 만약 클래스 선택자라면 .을 사용하여 .class-name처럼 접근해야 합니다.
+        $("#reply-box").prepend(replyItem(responseBody.body));
+        $("textarea").val("");
+    }
+
+
+    // let boardId = $("#boardId2").data("hello");
+    // console.log(boardId);
+
+    //let boardId2 = document.querySelector("#boardId2").dataset.hello;
+    //console.log(boardId2);
+
+
+    async function deleteReply(id) {
+        // 1. header + body
         let response = await fetch(`/api/reply/${id}`, {
             method: "delete"
         });
+        //2. body(parsing)
         let responseBody = await response.json(); // 파싱
-        if(response.ok){
+        if (response.ok) {
             $(`#reply-${id}`).remove();
-        }else{
+            //location.reload(); //F5
+        } else {
             alert(responseBody.msg);
         }
     }
