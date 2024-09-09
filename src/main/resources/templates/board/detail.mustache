@@ -1,5 +1,6 @@
 {{>layout/header}}
 
+
 <div class="container p-5">
 
     <!-- 수정삭제버튼 -->
@@ -29,10 +30,11 @@
     <div class="card mt-3">
         <!-- 댓글등록 -->
         <div class="card-body">
-            <form action="/reply/save" method="post">
-                <textarea class="form-control" rows="2" name="comment"></textarea>
+            <form>
+                <input type="hidden" value="{{model.id}}" id="boardId">
+                <textarea class="form-control" rows="2" id="comment"></textarea>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-primary mt-1">댓글등록</button>
+                    <button type="button" class="btn btn-outline-primary mt-1">댓글등록</button>
                 </div>
             </form>
         </div>
@@ -62,12 +64,15 @@
 
 <script>
     async function deleteReply(id){
+        // 1. header + body
         let response = await fetch(`/api/reply/${id}`, {
             method: "delete"
         });
+        // 2. body (parsing)
         let responseBody = await response.json(); // 파싱
         if(response.ok){
             $(`#reply-${id}`).remove();
+            //location.reload(); // F5
         }else{
             alert(responseBody.msg);
         }
