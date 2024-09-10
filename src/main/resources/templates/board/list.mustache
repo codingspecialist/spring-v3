@@ -2,6 +2,13 @@
 
 <div class="container p-5">
 
+    <div class="d-flex justify-content-end mb-2">
+        <form action="/" method="get" class="d-flex col-md-3">
+            <input  class="form-control me-2" type="text" placeholder="Search" name="title">
+            <button class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
     {{#models}}
 
         <div class="card mb-3">

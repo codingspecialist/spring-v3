@@ -13,11 +13,8 @@ import org.example.springv3.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +26,9 @@ public class BoardController {
 
     private final HttpSession session;
     private final BoardService boardService;
+
+
+
 
 
     @GetMapping("/test/v1")
@@ -92,9 +92,11 @@ public class BoardController {
 
 
 
+    // localhost:8080?title=제목
     @GetMapping("/")
-    public String list(HttpServletRequest request) {
-        List<Board> boardList = boardService.게시글목록보기();
+    //required = false 이걸 넣으면 주소창에 아무것도 안 넣어도 화면이 보인다.
+    public String list(@RequestParam(name = "title", required = false) String title, HttpServletRequest request) {
+        List<Board> boardList = boardService.게시글목록보기(title);
         request.setAttribute("models", boardList);
         return "board/list";
     }
