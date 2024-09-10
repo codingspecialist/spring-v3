@@ -62,6 +62,7 @@
 
 <script>
 
+    // 1. 책임 -> 디자인에 데이터 바인딩
     function replyItem(reply){
         return `<div id="reply-${reply.id}" class="list-group-item d-flex justify-content-between align-items-center">
                 <div class="d-flex">
@@ -72,6 +73,7 @@
             </div>`;
     }
 
+    // 1. 책임 -> 통신해서 데이터 요청하고 응답받으면 CSR하기
     async function saveReply(){
         // 1. Reply 객체 만들기 (id로 찾아서)
         let reply = {
@@ -94,7 +96,7 @@
         $("textarea").val("");
     }
 
-
+    // 1. 책임 -> 통신해서 데이터 요청하고 응답받으면 CSR하기
     async function deleteReply(id){
         // 1. header + body
         let response = await fetch(`/api/reply/${id}`, {

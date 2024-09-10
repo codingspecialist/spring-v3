@@ -6,11 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.List;
+
 @DataJpaTest // JpaRepository를 상속하면 import 안해도 된다.
 public class BoardRepositoryTest {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Test
+    public void mFindAll_test(){
+        // given
+        String title = "제";
+
+        // when
+        List<Board> boardList = boardRepository.mFindAll(title);
+
+        // eye
+        System.out.println(boardList.size());
+        System.out.println(boardList.get(0).getTitle());
+    }
+
 
     @Test
     public void mFindByIdWithReply_test(){

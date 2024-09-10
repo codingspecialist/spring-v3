@@ -13,11 +13,8 @@ import org.example.springv3.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,9 +73,11 @@ public class BoardController {
         return Resp.ok(users);
     }
 
+    // localhost:8080?title=제목
     @GetMapping("/")
-    public String list(HttpServletRequest request) {
-        List<Board> boardList = boardService.게시글목록보기();
+    public String list(@RequestParam(name = "title", required = false) String title, HttpServletRequest request) {
+        System.out.println("title : "+title);
+        List<Board> boardList = boardService.게시글목록보기(title);
         request.setAttribute("models", boardList);
         return "board/list";
     }

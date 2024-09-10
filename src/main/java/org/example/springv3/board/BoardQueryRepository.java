@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BoardQueryRepository {
     private final EntityManager em;
+
 }
