@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardResponse {
-
     @Data
     public static class DTO {
         private Integer id;

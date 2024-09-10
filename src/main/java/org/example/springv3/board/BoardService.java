@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -18,16 +19,23 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardQueryRepository boardQueryRepository;
 
-    public List<Board> 게시글목록보기(String title) {
+    public List<BoardResponse.DTO> 게시글목록보기(String title) {
+
+        List<BoardResponse.DTO> dtos = new ArrayList<>();
+        List<Board> boardList = null;
         if(title == null){
-            //Pageable pg = PageRequest.of(0, 3, Sort.Direction.DESC, "id");
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
-            List<Board> boardList = boardRepository.findAll(sort);
-            return boardList;
+            boardList = boardRepository.findAll(sort);
+
         }else{
-            List<Board> boardList = boardRepository.mFindAll(title);
-            return boardList;
+            boardList = boardRepository.mFindAll(title);
         }
+
+        for(Board board : boardList){
+            BoardResponse.DTO dto = new BoardResponse.DTO(board);
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
 

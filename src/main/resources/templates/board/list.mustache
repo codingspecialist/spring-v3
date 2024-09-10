@@ -3,25 +3,60 @@
 <div class="container p-5">
 
     <div class="d-flex justify-content-end mb-2">
-        <form action="/" method="get" class="d-flex col-md-3">
-            <input class="form-control me-2" type="text" placeholder="Search" name="title">
-            <button class="btn btn-primary">Search</button>
+        <form>
+            <input class="form-control me-2" type="text" placeholder="Search" id="title">
         </form>
     </div>
 
-    {{#models}}
-
-        <div class="card mb-3">
-            <div class="card-body">
-                <h4 class="card-title mb-3">{{title}}</h4>
-                <a href="/board/{{id}}" class="btn btn-primary">상세보기</a>
+    <div id="board-box">
+        {{#models}}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">{{title}}</h4>
+                    <a href="/board/{{id}}" class="btn btn-primary">상세보기</a>
+                </div>
             </div>
-        </div>
-
-    {{/models}}
-
-
-
+        {{/models}}
+    </div>
 </div>
+
+<script>
+
+    // 1. 디자인에 데이터 렌더링
+    function boardItem(board){
+        return `<div class="card mb-3">
+            <div class="card-body">
+                <h4 class="card-title mb-3">${board.title}</h4>
+                <a href="/board/${board.id}" class="btn btn-primary">상세보기</a>
+            </div>
+        </div>`;
+    }
+
+    // 2. 통신 + CSR
+    async function getBoardList(title){
+        let response = await fetch(`/board?title=${title}`);
+        let responseBody = await response.json();
+
+        if(response.ok){
+            $("#board-box").empty(); // remove는 dom제거, empty는 안에 있는 내용을 제거
+            let boardList = responseBody.body;
+            for(board of boardList){
+                let dom = boardItem(board);
+                $("#board-box").append(dom);
+            }
+        }else{
+            alert(responseBody.msg);
+        }
+    }
+
+    // 3. 키보드 이벤트 처리
+    $("#title").on("keyup", function(e){
+        // 1. 값 가져오기
+        let title = e.target.value;
+
+        // 2. fetch 요청
+        getBoardList(title);
+    });
+</script>
 
 {{>layout/footer}}

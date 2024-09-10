@@ -73,11 +73,17 @@ public class BoardController {
         return Resp.ok(users);
     }
 
+    @GetMapping("/board")
+    public ResponseEntity<?> boardList(@RequestParam(name = "title", required = false) String title) {
+        List<BoardResponse.DTO> boardList = boardService.게시글목록보기(title);
+        return ResponseEntity.ok(Resp.ok(boardList));
+    }
+
     // localhost:8080?title=제목
     @GetMapping("/")
     public String list(@RequestParam(name = "title", required = false) String title, HttpServletRequest request) {
         System.out.println("title : "+title);
-        List<Board> boardList = boardService.게시글목록보기(title);
+        List<BoardResponse.DTO> boardList = boardService.게시글목록보기(title);
         request.setAttribute("models", boardList);
         return "board/list";
     }
