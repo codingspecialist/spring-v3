@@ -90,8 +90,6 @@ public class BoardController {
 
 
 
-
-
     // localhost:8080?title=제목
     @GetMapping("/")
     //required = false 이걸 넣으면 주소창에 아무것도 안 넣어도 화면이 보인다.
