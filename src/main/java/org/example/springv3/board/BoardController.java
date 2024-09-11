@@ -27,28 +27,28 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/test/v6")
-    public ResponseEntity<?> testV6(){ // 1. ResponseBody 생략, 상태코드를 넣을 수 있다.
+    public ResponseEntity<?> testV6() { // 1. ResponseBody 생략, 상태코드를 넣을 수 있다.
         throw new ExceptionApi404("페이지를 찾을 수 없습니다");
     }
 
     @GetMapping("/test/v5")
-    public ResponseEntity<?> testV5(){ // 1. ResponseBody 생략, 상태코드를 넣을 수 있다.
+    public ResponseEntity<?> testV5() { // 1. ResponseBody 생략, 상태코드를 넣을 수 있다.
         return new ResponseEntity<>(Resp.fail(404, "찾을 수 없습니다"), HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/test/v4")
-    public @ResponseBody Resp testV4(HttpServletResponse response){
+    public @ResponseBody Resp testV4(HttpServletResponse response) {
         response.setStatus(404);
         return Resp.fail(404, "유저를 찾을 수 없습니다");
     }
 
     @GetMapping("/test/v3")
-    public @ResponseBody Resp testV3(){
+    public @ResponseBody Resp testV3() {
         return Resp.fail(404, "유저를 찾을 수 없습니다");
     }
 
     @GetMapping("/test/v1")
-    public @ResponseBody Resp testV1(){
+    public @ResponseBody Resp testV1() {
         User u = new User();
         u.setId(1);
         u.setUsername("ssar");
@@ -58,7 +58,7 @@ public class BoardController {
     }
 
     @GetMapping("/test/v2")
-    public @ResponseBody Resp testV2(){
+    public @ResponseBody Resp testV2() {
         User u1 = new User();
         u1.setId(1);
         u1.setUsername("ssar");
@@ -76,7 +76,7 @@ public class BoardController {
     // localhost:8080?title=제목
     @GetMapping("/")
     public String list(@RequestParam(name = "title", required = false) String title, HttpServletRequest request) {
-        System.out.println("title : "+title);
+        System.out.println("title : " + title);
         List<Board> boardList = boardService.게시글목록보기(title);
         request.setAttribute("models", boardList);
         return "board/list";
@@ -106,13 +106,12 @@ public class BoardController {
         return "redirect:/";
     }
 
-@GetMapping("/v2/api/board/{id}/update-form")
-public @ResponseBody BoardResponse.DTO updateForm(@PathVariable("id") int id) {
-    User sessionUser = (User) session.getAttribute("sessionUser");
-    BoardResponse.DTO model = boardService.게시글수정화면V2(id, sessionUser);
-    return model;
-}
-
+    @GetMapping("/v2/api/board/{id}/update-form")
+    public @ResponseBody BoardResponse.DTO updateForm(@PathVariable("id") int id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        BoardResponse.DTO model = boardService.게시글수정화면V2(id, sessionUser);
+        return model;
+    }
 
 
     @GetMapping("/api/board/{id}/update-form")

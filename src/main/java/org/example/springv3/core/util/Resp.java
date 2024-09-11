@@ -14,6 +14,10 @@ public class Resp<T> {
         return new Resp<>(200, "성공", body);
     }
 
+    public static <B> Resp<?> ok(B body, String msg){
+        return new Resp<>(200, msg, body);
+    }
+
     public static Resp<?> fail(Integer status, String msg){
         return new Resp<>(status, msg, null);
     }
