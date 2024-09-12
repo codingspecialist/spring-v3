@@ -10,6 +10,7 @@ import org.example.springv3.core.error.ex.ExceptionApi404;
 import org.example.springv3.core.util.Resp;
 import org.example.springv3.user.User;
 import org.example.springv3.user.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -93,9 +94,12 @@ public class BoardController {
     // localhost:8080?title=제목
     @GetMapping("/")
     //required = false 이걸 넣으면 주소창에 아무것도 안 넣어도 화면이 보인다.
-    public String list(@RequestParam(name = "title", required = false) String title, HttpServletRequest request) {
-        List<Board> boardList = boardService.게시글목록보기(title);
-        request.setAttribute("models", boardList);
+    public String list(
+            @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                       HttpServletRequest request) {
+        BoardResponse.PageDTO pageDTO = boardService.게시글목록보기(title,page);
+        request.setAttribute("model", pageDTO);
         return "board/list";
     }
 

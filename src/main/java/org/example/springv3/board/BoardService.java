@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.springv3.core.error.ex.Exception400;
 import org.example.springv3.core.error.ex.Exception403;
 import org.example.springv3.user.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,21 +24,22 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardQueryRepository boardQueryRepository;
 
-    public List<Board> 게시글목록보기(String title) {
+    public BoardResponse.PageDTO 게시글목록보기(String title, int page) {
+        Pageable pageable = PageRequest.of(page, 3, Sort.Direction.DESC, "id");
+
         if (title == null) {
-            //Pageable pg = PageRequest.of(0, 3, Sort.Direction.DESC, "id");
-            Sort sort = Sort.by(Sort.Direction.DESC, "id");
-            List<Board> boardList = boardRepository.findAll(sort);
-            return boardList;
+            // Sort sort = Sort.by(Sort.Direction.DESC, "id");
+            Page<Board> boardPG  = boardRepository.findAll(pageable);
+            System.out.println("---------------------------"+boardPG);
+            return new BoardResponse.PageDTO(boardPG);
+        } else {
+            Page<Board> boardPG = boardRepository.mfindAll1(title, pageable);
+            return new BoardResponse.PageDTO(boardPG);
 
         }
-        else {
-            List<Board> boardList = boardRepository.mfindAll(title);
-            return boardList;
-
-        }
-
     }
+
+
 
 
     @Transactional

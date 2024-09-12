@@ -3,6 +3,10 @@ package org.example.springv3.board;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.example.springv3.user.User;
+import org.springframework.data.domain.Page;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardRequest {
     @Data
@@ -32,4 +36,6 @@ public class BoardRequest {
         private String content;
 
     }
+
+
 }
