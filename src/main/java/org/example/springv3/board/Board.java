@@ -1,5 +1,6 @@
 package org.example.springv3.board;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.util.List;
-
 
 @NoArgsConstructor // 빈 생성자 (하이버네이트가 om 할때 필요)
 @Setter
@@ -28,11 +28,12 @@ public class Board {
     private Timestamp createdAt;
 
     // fk
-    @JsonIgnoreProperties({"password"})
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JsonIgnoreProperties({"board", "createdAt"})
+    //@JsonIgnore
+    //@JsonIgnoreProperties({"board", "createdAt"})
     @OneToMany(mappedBy = "board")
     private List<Reply> replies;
 
@@ -43,5 +44,17 @@ public class Board {
         this.content = content;
         this.createdAt = createdAt;
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                ", user=" + user +
+                ", replies=" + replies +
+                '}';
     }
 }
