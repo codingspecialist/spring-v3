@@ -23,10 +23,10 @@ public class BoardService {
         Pageable pageable = PageRequest.of(page, 3, Sort.Direction.DESC, "id");
         if (title == null) {
             Page<Board> boardPG = boardRepository.findAll(pageable);
-            return new BoardResponse.PageDTO(boardPG);
+            return new BoardResponse.PageDTO(boardPG, "");
         } else {
             Page<Board> boardPG = boardRepository.mFindAll(title, pageable);
-            return new BoardResponse.PageDTO(boardPG);
+            return new BoardResponse.PageDTO(boardPG, title);
         }
     }
 

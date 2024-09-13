@@ -45,21 +45,12 @@ public class BoardResponse {
         private Boolean last;
         private Integer prev; // 현재페이지 -1
         private Integer next; // 현재페이지 +1
-
-        // [0,1,2, -> 0number]
-        // [3,4,5, -> 3number]
-        // [6,7,9, -> 6number]
-        // number = 0 (0,1,2)
-        // number = 1 (0,1,2)
-        // number = 2 (0,1,2)
-        // number = 3 (3,4,5)
-        // number = 4 (3,4,5)
-        // number = 5 (3,4,5)
-        // number = 6 (6,7,8)
+        private String keyword; // 검색 제목
         private List<Integer> numbers = new ArrayList<>();
         private List<Content> contents = new ArrayList<>();
 
-        public PageDTO(Page<Board> boardPG) {
+        public PageDTO(Page<Board> boardPG, String title) {
+            this.keyword = title;
             this.number = boardPG.getNumber();
             this.totalPage = boardPG.getTotalPages();
             this.size = boardPG.getSize();
