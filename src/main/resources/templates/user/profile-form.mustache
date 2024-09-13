@@ -1,0 +1,23 @@
+{{> layout/header}}
+
+<div class="container p-5">
+
+    <!-- 요청을 하면 localhost:8080/login POST로 요청됨
+    username=사용자입력값&password=사용자값 -->
+    <div class="card">
+        <div class="card-header"><b>프로필 사진을 등록해주세요</b></div>
+        <div class="card-body d-flex justify-content-center">
+            <img src="/images/{{profile}}" width="200px" height="200px">
+        </div>
+        <div class="card-body">
+            <form action="/api/user/profile" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="profile">
+                </div>
+                <button type="submit" class="btn btn-primary form-control">사진변경</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer}}
