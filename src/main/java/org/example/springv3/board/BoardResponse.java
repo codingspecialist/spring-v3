@@ -10,6 +10,32 @@ import java.util.List;
 
 public class BoardResponse {
 
+    @Data // getter, setter, toString
+    public static class ListDTOV2 {
+        private Integer id;
+        private String title;
+        private Long count;
+
+        public ListDTOV2(Integer id, String title, Long count) {
+            this.id = id;
+            this.title = title;
+            this.count = count;
+        }
+    }
+
+    @Data // getter, setter, toString
+    public static class ListDTO {
+        private Integer id;
+        private String title;
+        private Long count;
+
+        public ListDTO(Integer id, String title, Long count) {
+            this.id = id;
+            this.title = title;
+            this.count = count;
+        }
+    }
+
     @Data
     public static class PageDTO {
         private Integer number; // 현재페이지
@@ -19,6 +45,18 @@ public class BoardResponse {
         private Boolean last;
         private Integer prev; // 현재페이지 -1
         private Integer next; // 현재페이지 +1
+
+        // [0,1,2, -> 0number]
+        // [3,4,5, -> 3number]
+        // [6,7,9, -> 6number]
+        // number = 0 (0,1,2)
+        // number = 1 (0,1,2)
+        // number = 2 (0,1,2)
+        // number = 3 (3,4,5)
+        // number = 4 (3,4,5)
+        // number = 5 (3,4,5)
+        // number = 6 (6,7,8)
+        private List<Integer> numbers = new ArrayList<>();
         private List<Content> contents = new ArrayList<>();
 
         public PageDTO(Page<Board> boardPG) {
@@ -29,6 +67,11 @@ public class BoardResponse {
             this.last = boardPG.isLast();
             this.prev = boardPG.getNumber()-1;
             this.next = boardPG.getNumber()+1;
+            int temp = (number / 3)*3; // 0 -> 0, 3 -> 3, 6 -> 6
+
+            for(int i=temp; i<temp+3; i++){ // 0
+                this.numbers.add(i);
+            }
             for (Board board : boardPG.getContent()){
                 contents.add(new Content(board));
             }
